@@ -699,10 +699,9 @@
       </div>
 
       <div class="membership-grid">
-        <!-- Tier 1: Annual Membershio Sworn Personnel -->
         <div class="membership-card featured">
           <div class="popular-badge">Most Popular</div>
-          <h3 class="membership-name">Annual Membershio Sworn Personnel</h3>
+          <h3 class="membership-name">Annual Membership – Sworn Personnel</h3>
           <div class="membership-price">$75 <span>/ year</span></div>
           <p class="membership-desc">For active licensed Texas peace officers and federal law enforcement agents.</p>
           <ul class="membership-features">
@@ -710,15 +709,13 @@
             <li class="membership-feature"><i class="fas fa-check"></i> National NLPOA convention eligibility</li>
             <li class="membership-feature"><i class="fas fa-check"></i> Officer wellness & peer mentorship network</li>
           </ul>
-          <button class="btn btn-primary-gold join-tier-btn" data-tier="Active Peace Officer">
-            Join as Active Officer Annual Memebrship
-          </button>
+          <a href="#" class="btn btn-primary-gold pay-link" data-pay="annualOfficer" style="margin-top:auto;">
+            <i class="fab fa-paypal"></i> Join – $75 / year
+          </a>
         </div>
-
-         <!-- Tier 2: Monthly Membershio + Legal Coverage Sworn Personnel -->
         <div class="membership-card featured">
           <div class="popular-badge">Most Popular</div>
-          <h3 class="membership-name">Monthly Membershio + Legal Coverage Sworn Personnel</h3>
+          <h3 class="membership-name">Monthly Membership + Legal Coverage – Sworn Personnel</h3>
           <div class="membership-price">$50 <span>/ month</span></div>
           <p class="membership-desc">For active licensed Texas peace officers and federal law enforcement agents.</p>
           <ul class="membership-features">
@@ -727,11 +724,11 @@
             <li class="membership-feature"><i class="fas fa-check"></i> National NLPOA convention eligibility</li>
             <li class="membership-feature"><i class="fas fa-check"></i> Officer wellness & peer mentorship network</li>
           </ul>
-          <button class="btn btn-primary-gold join-tier-btn" data-tier="Active Peace Officer">
-            Join as Active Officer Annual Memebrship
-          </button>
+          <a href="#" class="btn btn-primary-gold pay-link" data-pay="monthlyOfficer" style="margin-top:auto;">
+            <i class="fab fa-paypal"></i> Subscribe – $50 / month
+          </a>
+          <p style="font-size:0.75rem; color:var(--slate-400); text-align:center; margin-top:0.75rem;">Billed automatically each month through PayPal. Cancel anytime.</p>
         </div>
-        <!-- Tier 3: Annual Civilian Member -->
         <div class="membership-card">
           <h3 class="membership-name">Annual Civilian Member</h3>
           <div class="membership-price">$50 <span>/ year</span></div>
@@ -742,12 +739,10 @@
             <li class="membership-feature"><i class="fas fa-check"></i> Community outreach committee participation</li>
             <li class="membership-feature"><i class="fas fa-check"></i> Exclusive event discounts & mixers</li>
           </ul>
-          <button class="btn btn-outline-white join-tier-btn" data-tier="Associate Member">
-            Join as Associate
-          </button>
+          <a href="#" class="btn btn-outline-white pay-link" data-pay="annualCivilian" style="margin-top:auto;">
+            <i class="fab fa-paypal"></i> Join – $50 / year
+          </a>
         </div>
-
-        <!-- Tier 4: Police Academy Cadets -->
         <div class="membership-card">
           <h3 class="membership-name">Police Academy Cadets</h3>
           <div class="membership-price">$40 <span>/ year</span></div>
@@ -758,16 +753,25 @@
             <li class="membership-feature"><i class="fas fa-check"></i> Law enforcement interview prep & workshops</li>
             <li class="membership-feature"><i class="fas fa-check"></i> Resume review by senior investigators</li>
           </ul>
-          <button class="btn btn-outline-white join-tier-btn" data-tier="Student / Cadet">
-            Join as Student / Cadet
-          </button>
+          <a href="#" class="btn btn-outline-white pay-link" data-pay="cadet" style="margin-top:auto;">
+            <i class="fab fa-paypal"></i> Join – $40 / year
+          </a>
         </div>
-        
-          <button class="btn btn-outline-gold join-tier-btn" data-tier="Community Ally">
-            Partner With NLPOA
-          </button>
+        <div class="membership-card">
+          <h3 class="membership-name">Community Ally & Sponsors</h3>
+          <div class="membership-price">Custom <span></span></div>
+          <p class="membership-desc">For businesses and community partners who want to support NLPOA's mission.</p>
+          <ul class="membership-features">
+            <li class="membership-feature"><i class="fas fa-check"></i> Golf Classic & event sponsorships</li>
+            <li class="membership-feature"><i class="fas fa-check"></i> Recognition at chapter events</li>
+          </ul>
+          <a href="#contact" class="btn btn-outline-gold" style="margin-top:auto;">Partner With NLPOA</a>
         </div>
       </div>
+
+      <p style="text-align:center; color:var(--slate-300); font-size:0.85rem; margin-top:-1.5rem;">
+        <i class="fas fa-lock"></i> Payments are processed securely by PayPal. No PayPal account is needed to pay by card.
+      </p>
     </div>
   </section>
 
@@ -812,11 +816,11 @@
         </div>
 
         <button class="btn btn-primary-gold btn-lg" id="donateSubmitBtn" style="width: 100%;">
-          <i class="fas fa-lock"></i> Proceed with Secure Contribution
+          <i class="fab fa-paypal"></i> Continue to PayPal to Donate
         </button>
 
         <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--slate-500); display: flex; align-items: center; justify-content: center; gap: 1.5rem;">
-          <span><i class="fas fa-shield-alt" style="color:var(--success);"></i> 256-Bit SSL Encryption</span>
+          <span><i class="fas fa-shield-alt" style="color:var(--success);"></i> Secure checkout by PayPal</span>
           <span><i class="fas fa-receipt" style="color:var(--gold-600);"></i> 501(c)(3) Tax Deductible</span>
         </div>
       </div>
@@ -1555,146 +1559,6 @@
             <button type="button" class="btn btn-navy" onclick="closeAllModals()">Close & Return</button>
           </div>
         </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. Membership Registration & Live Digital ID Card Modal -->
-  <div class="modal-overlay" id="membershipModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 style="color:#fff; font-size:1.25rem;"><i class="fas fa-id-card" style="color:var(--gold-400);"></i> NLPOA Membership Portal</h3>
-        <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="membershipForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Full Name *</label>
-              <input type="text" id="memFullName" class="form-control" placeholder="e.g. Officer Alejandro Morales" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Agency / Department / College *</label>
-              <input type="text" id="memAgency" class="form-control" placeholder="e.g. Houston Police Department" required>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Membership Tier *</label>
-              <select id="memTierSelect" class="form-control">
-                <option value="Active Peace Officer">Active Peace Officer ($50/yr)</option>
-                <option value="Associate Member">Associate Member ($40/yr)</option>
-                <option value="Student / Cadet">Student / Cadet ($20/yr)</option>
-                <option value="Community Ally">Community Ally ($250/yr)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Badge # / Student ID</label>
-              <input type="text" class="form-control" placeholder="Optional Badge / ID">
-            </div>
-          </div>
-
-          <!-- Digital Card Live Preview -->
-          <div style="font-size:0.85rem; font-weight:700; color:var(--slate-700); margin-top:0.5rem;">
-            Instant Digital Member Pass Preview:
-          </div>
-          <div class="id-card-preview">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-              <div style="display:flex; align-items:center; gap:0.6rem;">
-                <div style="width:36px; height:36px; border-radius:50%; background:#fff; padding:2px;">
-                  <img src="C:/Users/gonhe/.gemini/antigravity/brain/dac78599-4cf3-4737-8a22-cb0198e6c9a9/.user_uploaded/media_1787025720046.png" alt="Crest" style="width:100%;height:100%;object-fit:cover;">
-                </div>
-                <div>
-                  <div style="font-size:0.75rem; font-weight:800; color:var(--gold-400);">NLPOA GREATER HOUSTON</div>
-                  <div style="font-size:0.65rem; color:#cbd5e1;">OFFICIAL MEMBER</div>
-                </div>
-              </div>
-              <div style="font-size:0.7rem; background:rgba(212, 175, 55, 0.2); padding:0.2rem 0.5rem; border-radius:4px; color:var(--gold-300);">
-                STATUS: VERIFIED
-              </div>
-            </div>
-
-            <div style="font-family:var(--font-heading); font-size:1.25rem; font-weight:800;" id="cardMemberName">
-              OFFICER ALEJANDRO MORALES
-            </div>
-            <div style="font-size:0.85rem; color:#94a3b8; margin-bottom:0.75rem;" id="cardMemberAgency">
-              HOUSTON POLICE DEPARTMENT
-            </div>
-
-            <div style="display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.15); padding-top:0.75rem; font-size:0.75rem;">
-              <div>
-                <span style="color:#94a3b8;">TIER: </span>
-                <strong id="cardMemberTier" style="color:var(--gold-400);">ACTIVE PEACE OFFICER</strong>
-              </div>
-              <div>
-                <span style="color:#94a3b8;">MEMBER ID: </span>
-                <strong id="cardMemberId">HOU-74892</strong>
-              </div>
-              <div>
-                <span style="color:#94a3b8;">EXP: </span>
-                <strong id="cardMemberExp">DEC 2027</strong>
-              </div>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary-gold btn-lg" style="width:100%; margin-top:1.5rem;">
-            <i class="fas fa-check"></i> Complete Registration & Activate
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6. Donation Receipt & Checkout Modal -->
-  <div class="modal-overlay" id="donateModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 style="color:#fff; font-size:1.25rem;"><i class="fas fa-receipt" style="color:var(--gold-400);"></i> Contribution Summary</h3>
-        <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div style="background:var(--slate-50); border:1px solid var(--slate-200); border-radius:var(--radius-md); padding:1.5rem; margin-bottom:1.5rem;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem;">
-            <span style="color:var(--slate-500);">Contribution Amount:</span>
-            <strong id="receiptAmount" style="font-size:1.5rem; color:var(--navy-900);">$100.00</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem;">
-            <span style="color:var(--slate-500);">Designation:</span>
-            <strong id="receiptCause" style="color:var(--gold-700);">Scholarship Fund</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem;">
-            <span style="color:var(--slate-500);">Tax ID Reference:</span>
-            <strong id="receiptNumber" style="font-family:monospace; color:var(--slate-700);">TX-NLPOA-829104</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between;">
-            <span style="color:var(--slate-500);">Organization:</span>
-            <span>NLPOA Greater Houston (501c3)</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Name on Card / Contributor</label>
-          <input type="text" class="form-control" placeholder="Johnathan Doe" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Card Number (Simulated Checkout)</label>
-          <input type="text" class="form-control" placeholder="•••• •••• •••• 4242" value="4242 •••• •••• 4242">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Expiration</label>
-            <input type="text" class="form-control" placeholder="MM/YY" value="12/28">
-          </div>
-          <div class="form-group">
-            <label class="form-label">CVC</label>
-            <input type="text" class="form-control" placeholder="CVC" value="994">
-          </div>
-        </div>
-
-        <button type="button" class="btn btn-primary-gold btn-lg" id="confirmDonationPaymentBtn" style="width:100%;">
-          <i class="fas fa-lock"></i> Authorize & Issue Receipt
-        </button>
       </div>
     </div>
   </div>
