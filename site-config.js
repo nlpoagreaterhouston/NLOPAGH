@@ -53,16 +53,21 @@ const SITE_CONFIG = {
   payments: {
     // Your PayPal "Merchant ID" (Profile > Business information). Used for donations.
     // Use the Merchant ID, NOT your email, so your email isn't visible in the page.
-    paypalMerchantId: "BXENTMQVHDMAQ",
+    paypalMerchantId: "",
+
+    // OPTIONAL: a PayPal "Donate" button link (https://www.paypal.com/donate/?hosted_button_id=...).
+    // If filled in, the Donate button uses this instead of the Merchant ID, and donors
+    // type their amount on PayPal's page. Leave "" to use the Merchant ID + amount picker.
+    donateUrl: "",
 
     // One PayPal link per membership tier.
     // Annual tiers: a Pay Now / Buy Now button link, or a yearly Subscription plan link.
     // Monthly tier: a Subscription PLAN link (this is what bills members automatically).
     tiers: {
-      annualOfficer:   "https://www.paypal.com/ncp/payment/H68ZMD652W33J",   // $75 / year  - Annual Membership, Sworn Personnel
-      monthlyOfficer:  "https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3LC82749XW3469437NLEGNVY",   // $50 / month - Monthly Membership + Legal Coverage (recurring)
-      annualCivilian:  "https://www.paypal.com/ncp/payment/KVUWC9ZR2APGY",   // $50 / year  - Annual Civilian Member
-      cadet:           "https://www.paypal.com/ncp/payment/W5FHTYR7Y5UY4"    // $40 / year  - Police Academy Cadets
+      annualOfficer:   "",   // $75 / year  - Annual Membership, Sworn Personnel
+      monthlyOfficer:  "",   // $50 / month - Monthly Membership + Legal Coverage (recurring)
+      annualCivilian:  "",   // $50 / year  - Annual Civilian Member
+      cadet:           ""    // $40 / year  - Police Academy Cadets
     }
   },
 
@@ -72,12 +77,16 @@ const SITE_CONFIG = {
   // It looks like: https://script.google.com/macros/s/AKfy.../exec
   // Leave "" to use the email-only (FormSubmit) method instead.
   // ==========================================================================
-  contactSheetUrl: "https://script.google.com/macros/s/AKfycbxCyaxiU92XLZsA8vkVvWEoUL5LcPUCvjecyx1J79Vo0GLdFkktPH14qvYLX9w7BgU/exec",
+  contactSheetUrl: "",
 
-  // MEMBERSHIP PORTAL DEMO CREDENTIALS
-  memberPortalDemo: {
-    email: "member@nlpoa.org",
-    password: "Houston2026!"
+  // ==========================================================================
+  // MEMBERSHIP SIGN-UP FORM -> GOOGLE SHEET
+  // Paste the Google Apps Script "Web app" link for your MEMBERSHIP sheet here.
+  // (This is a different link from contactSheetUrl above. See MEMBERSHIP-SHEET-SETUP.md.)
+  // Leave "" and the sign-up details will be emailed to the board instead.
+  // ==========================================================================
+  membershipSheetUrl: "",
+
   // MEMBERSHIP PORTAL DEMO CREDENTIALS
   memberPortalDemo: {
     email: "member@nlpoa.org",
