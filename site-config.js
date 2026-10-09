@@ -53,7 +53,7 @@ const SITE_CONFIG = {
   payments: {
     // Your PayPal "Merchant ID" (Profile > Business information). Used for donations.
     // Use the Merchant ID, NOT your email, so your email isn't visible in the page.
-    paypalMerchantId: "",
+    paypalMerchantId: "AdotTcGfyfd_Xblc4Vs1k",
 
     // One PayPal link per membership tier.
     // Annual tiers: a Pay Now / Buy Now button link, or a yearly Subscription plan link.
