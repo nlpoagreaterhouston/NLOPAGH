@@ -534,6 +534,13 @@ function initMembershipSignup() {
         return;
       }
 
+      // Safety net: if the pop-up isn't on the page (older index.html), go straight to PayPal
+      if (!modal || !form || !step1 || !step2) {
+        console.warn('[NLPOA payments] Membership pop-up not found on this page; opening PayPal directly.');
+        window.open(payUrl, '_blank');
+        return;
+      }
+
       // Read the tier name and price from the card so it always matches what's on the page
       const card = link.closest('.membership-card');
       const name = (card?.querySelector('.membership-name')?.textContent || key).replace(/\s+/g, ' ').trim();
@@ -541,8 +548,7 @@ function initMembershipSignup() {
       current = { key, name, price, payUrl };
 
       form.reset();
-      heardOther.style.display = 'none';
-      heardOther.required = false;
+      if (heardOther) { heardOther.style.display = 'none'; heardOther.required = false; }
       step1.style.display = 'block';
       step2.style.display = 'none';
       document.getElementById('msTierName').textContent = name;
@@ -583,6 +589,30 @@ function initMembershipSignup() {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
+    // Show step 2 (PayPal button). If the details could not be saved, add a note.
+    const goToPayment = (saved) => {
+      const payBtn = document.getElementById('msPayBtn');
+      document.getElementById('msThanksName').textContent = fullName.split(' ')[0];
+      payBtn.href = current.payUrl;
+      document.getElementById('msPayLabel').textContent = 'Continue to PayPal – ' + current.price;
+
+      let warn = document.getElementById('msSaveWarning');
+      if (!saved) {
+        if (!warn) {
+          warn = document.createElement('p');
+          warn.id = 'msSaveWarning';
+          warn.style.cssText = 'font-size:0.82rem; color:var(--slate-700); background:#fff7e0; border:1px solid var(--gold-500); border-radius:6px; padding:0.7rem 0.9rem; margin:0 0 1rem; text-align:left;';
+          payBtn.parentNode.insertBefore(warn, payBtn);
+        }
+        warn.textContent = 'Note: we could not record your details automatically. After you pay, please email ' + TO_EMAIL + ' with your name, mailing address, agency, and position.';
+        warn.style.display = 'block';
+      } else if (warn) {
+        warn.style.display = 'none';
+      }
+      step1.style.display = 'none';
+      step2.style.display = 'block';
+    };
+
     try {
       if (useSheet) {
         // Adds a row to the membership Google Sheet. Google doesn't let the page read the
@@ -622,15 +652,11 @@ function initMembershipSignup() {
         if (!res.ok || data.success === 'false' || data.success === false) throw new Error('Send failed');
       }
 
-      // Show step 2 with the PayPal button for this tier
-      document.getElementById('msThanksName').textContent = fullName.split(' ')[0];
-      document.getElementById('msPayBtn').href = current.payUrl;
-      document.getElementById('msPayLabel').textContent = 'Continue to PayPal – ' + current.price;
-      step1.style.display = 'none';
-      step2.style.display = 'block';
+      goToPayment(true);
     } catch (err) {
+      // Saving failed, but never block someone from paying: continue to PayPal with a note
       console.error('[NLPOA membership signup]', err);
-      showToast('We could not save your information. Please try again, or email ' + TO_EMAIL + '.', 'warning');
+      goToPayment(false);
     } finally {
       submitBtn.disabled = false;
       submitBtn.innerHTML = originalHtml;
