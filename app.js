@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // can never stop the others (including the payment buttons) from working.
   [
     initPayments,
+    initMembershipSignup,
     initMobileNav,
     initGalleryAndSocialFeed,
     initScholarshipPortal,
@@ -394,21 +395,7 @@ function initPayments() {
   // Only ever send people to PayPal
   const isPayPalUrl = (u) => /^https:\/\/(www\.)?paypal\.com\//i.test(u || '');
 
-  // ---- Membership tier buttons ----
-  document.querySelectorAll('.pay-link').forEach(link => {
-    const url = (tiers[link.dataset.pay] || '').trim();
-    if (isPayPalUrl(url)) {
-      link.href = url;
-      link.target = '_blank';
-      link.rel = 'noopener';
-    } else {
-      console.warn('[NLPOA payments] No valid PayPal link for tier "' + link.dataset.pay + '". Value seen by the page:', JSON.stringify(url), '| tiers loaded:', Object.keys(tiers));
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        showToast('Online payment for this tier is not set up yet. Please email nlpoahouston@gmail.com to join.', 'warning');
-      });
-    }
-  });
+  // (Membership tier buttons are handled by initMembershipSignup below)
 
   // ---- Donations ----
   const presetBtns = document.querySelectorAll('.preset-btn');
@@ -499,6 +486,156 @@ function initEventsCalendar() {
       }, 1500);
     });
   }
+}
+
+/* ==========================================================================
+   4b. Membership Sign-Up Pop-up
+   Tier button -> member fills in details -> saved to Google Sheet -> PayPal
+   ========================================================================== */
+function isPayPalLink(u) {
+  return /^https:\/\/(www\.)?paypal\.com\//i.test(u || '');
+}
+
+function initMembershipSignup() {
+  const cfg = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG) || {};
+  const tiers = (cfg.payments && cfg.payments.tiers) || {};
+  const sheetUrl = (cfg.membershipSheetUrl || '').trim();
+  const useSheet = /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(sheetUrl);
+  const TO_EMAIL = cfg.emailAddress || 'nlpoahouston@gmail.com';
+
+  const modal = document.getElementById('membershipModal');
+  const form = document.getElementById('membershipSignupForm');
+  const step1 = document.getElementById('msStep1');
+  const step2 = document.getElementById('msStep2');
+  const heardSel = document.getElementById('msHeard');
+  const heardOther = document.getElementById('msHeardOther');
+  const submitBtn = document.getElementById('msSubmitBtn');
+  const openedAt = { t: 0 };
+  let current = null;
+
+  if (heardSel && heardOther) {
+    heardSel.addEventListener('change', () => {
+      const isOther = heardSel.value === 'Other';
+      heardOther.style.display = isOther ? 'block' : 'none';
+      heardOther.required = isOther;
+    });
+  }
+
+  // Tier buttons open the pop-up
+  document.querySelectorAll('.pay-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const key = link.dataset.pay;
+      const payUrl = (tiers[key] || '').trim();
+
+      if (!isPayPalLink(payUrl)) {
+        console.warn('[NLPOA payments] No valid PayPal link for tier "' + key + '". Value seen by the page:', JSON.stringify(payUrl));
+        showToast('Online payment for this tier is not set up yet. Please email ' + TO_EMAIL + ' to join.', 'warning');
+        return;
+      }
+
+      // Read the tier name and price from the card so it always matches what's on the page
+      const card = link.closest('.membership-card');
+      const name = (card?.querySelector('.membership-name')?.textContent || key).replace(/\s+/g, ' ').trim();
+      const price = (card?.querySelector('.membership-price')?.textContent || '').replace(/\s+/g, ' ').trim();
+      current = { key, name, price, payUrl };
+
+      form.reset();
+      heardOther.style.display = 'none';
+      heardOther.required = false;
+      step1.style.display = 'block';
+      step2.style.display = 'none';
+      document.getElementById('msTierName').textContent = name;
+      document.getElementById('msTierPrice').textContent = price;
+      openedAt.t = Date.now();
+      modal.classList.add('active');
+    });
+  });
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!current) return;
+
+    const v = (id) => (document.getElementById(id)?.value || '').trim();
+    const fullName = v('msFullName');
+    const address = v('msAddress');
+    const email = v('msEmail');
+    const phone = v('msPhone');
+    const agency = v('msAgency');
+    const position = v('msPosition');
+    let heard = v('msHeard');
+    if (heard === 'Other') heard = 'Other: ' + (v('msHeardOther') || 'not specified');
+
+    if (!fullName || !address || !email || !phone || !agency || !position) {
+      showToast('Please complete all required fields.', 'warning');
+      return;
+    }
+
+    // Bot traps: hidden field filled in, or submitted impossibly fast
+    if (v('msWebsite') || (Date.now() - openedAt.t) < 2500) {
+      if (!v('msWebsite')) showToast('Please review your details, then try again.', 'warning');
+      return;
+    }
+
+    const originalHtml = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+    try {
+      if (useSheet) {
+        // Adds a row to the membership Google Sheet. Google doesn't let the page read the
+        // reply, so "no network error" is treated as success.
+        await fetch(sheetUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            tier: current.name,
+            price: current.price,
+            fullName, address, email, phone, agency, position, heard,
+            website: v('msWebsite')
+          })
+        });
+      } else {
+        // Backup if no Sheet link is set yet: email the details to the board
+        const res = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(TO_EMAIL), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: 'NLPOA Membership Application: ' + fullName + ' (' + current.name + ')',
+            _replyto: email,
+            _template: 'table',
+            _captcha: 'false',
+            Tier: current.name + ' ' + current.price,
+            'Full Name': fullName,
+            'Mailing Address': address,
+            Email: email,
+            Phone: phone,
+            Agency: agency,
+            Position: position,
+            'How they heard about us': heard || 'Not provided'
+          })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.success === 'false' || data.success === false) throw new Error('Send failed');
+      }
+
+      // Show step 2 with the PayPal button for this tier
+      document.getElementById('msThanksName').textContent = fullName.split(' ')[0];
+      document.getElementById('msPayBtn').href = current.payUrl;
+      document.getElementById('msPayLabel').textContent = 'Continue to PayPal – ' + current.price;
+      step1.style.display = 'none';
+      step2.style.display = 'block';
+    } catch (err) {
+      console.error('[NLPOA membership signup]', err);
+      showToast('We could not save your information. Please try again, or email ' + TO_EMAIL + '.', 'warning');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalHtml;
+    }
+  });
 }
 
 /* ==========================================================================
