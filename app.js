@@ -565,23 +565,45 @@ function initContactForm() {
     }
 
     try {
-      const res = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(TO_EMAIL), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _subject: 'NLPOA Website: ' + topic + ' (from ' + name + ')',
-          _replyto: email,
-          _template: 'table',
-          _captcha: 'false',
-          Name: name,
-          Email: email,
-          Phone: phone,
-          Topic: topic,
-          Message: msg
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || data.success === 'false' || data.success === false) throw new Error('Send failed');
+      const sheetUrl = ((typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.contactSheetUrl) || '').trim();
+      const useSheet = /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(sheetUrl);
+
+      if (useSheet) {
+        // Saves a new row in the Google Sheet (and emails a copy). Google doesn't allow the
+        // page to read the reply, so "no network error" is treated as success.
+        await fetch(sheetUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone === 'Not provided' ? '' : phone,
+            topic: topic,
+            message: msg,
+            website: document.getElementById('contactWebsite')?.value || ''
+          })
+        });
+      } else {
+        // Fallback: email-only delivery through FormSubmit
+        const res = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(TO_EMAIL), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: 'NLPOA Website: ' + topic + ' (from ' + name + ')',
+            _replyto: email,
+            _template: 'table',
+            _captcha: 'false',
+            Name: name,
+            Email: email,
+            Phone: phone,
+            Topic: topic,
+            Message: msg
+          })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.success === 'false' || data.success === false) throw new Error('Send failed');
+      }
 
       showToast('Thank you, ' + name + '! Your message was sent to the board.', 'success');
       contactForm.reset();
