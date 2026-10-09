@@ -64,8 +64,8 @@ const SITE_CONFIG = {
     // Annual tiers: a Pay Now / Buy Now button link, or a yearly Subscription plan link.
     // Monthly tier: a Subscription PLAN link (this is what bills members automatically).
     tiers: {
-      annualOfficer:   "https://www.paypal.com/ncp/payment/DDPXLFC7G9V92",   // $75 / year  - Annual Membership, Sworn Personnel
-      monthlyOfficer:  "https://www.paypal.com/ncp/payment/H68ZMD652W33J",   // $50 / month - Monthly Membership + Legal Coverage (recurring)
+      annualOfficer:   "https://www.paypal.com/ncp/payment/H68ZMD652W33J",   // $75 / year  - Annual Membership, Sworn Personnel
+      monthlyOfficer:  "https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3LC82749XW3469437NLEGNVY",   // $50 / month - Monthly Membership + Legal Coverage (recurring)
       annualCivilian:  "https://www.paypal.com/ncp/payment/KVUWC9ZR2APGY",   // $50 / year  - Annual Civilian Member
       cadet:           "https://www.paypal.com/ncp/payment/W5FHTYR7Y5UY4"    // $40 / year  - Police Academy Cadets
     }
