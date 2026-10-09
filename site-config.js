@@ -53,7 +53,7 @@ const SITE_CONFIG = {
   payments: {
     // Your PayPal "Merchant ID" (Profile > Business information). Used for donations.
     // Use the Merchant ID, NOT your email, so your email isn't visible in the page.
-    paypalMerchantId: "",
+    paypalMerchantId: "BXENTMQVHDMAQ",
 
     // OPTIONAL: a PayPal "Donate" button link (https://www.paypal.com/donate/?hosted_button_id=...).
     // If filled in, the Donate button uses this instead of the Merchant ID, and donors
