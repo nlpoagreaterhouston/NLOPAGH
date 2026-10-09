@@ -709,7 +709,7 @@
             <li class="membership-feature"><i class="fas fa-check"></i> National NLPOA convention eligibility</li>
             <li class="membership-feature"><i class="fas fa-check"></i> Officer wellness & peer mentorship network</li>
           </ul>
-          <a href="#" class="btn btn-primary-gold pay-link" data-pay="annualOfficer" style="margin-top:auto;">
+          <a href="#membership" class="btn btn-primary-gold pay-link" data-pay="annualOfficer" style="margin-top:auto;">
             <i class="fab fa-paypal"></i> Join – $75 / year
           </a>
         </div>
@@ -724,8 +724,8 @@
             <li class="membership-feature"><i class="fas fa-check"></i> National NLPOA convention eligibility</li>
             <li class="membership-feature"><i class="fas fa-check"></i> Officer wellness & peer mentorship network</li>
           </ul>
-          <a href="#" class="btn btn-primary-gold pay-link" data-pay="monthlyOfficer" style="margin-top:auto;">
-            <i class="fab fa-paypal"></i> Join – $50 / month
+          <a href="#membership" class="btn btn-primary-gold pay-link" data-pay="monthlyOfficer" style="margin-top:auto;">
+            <i class="fab fa-paypal"></i> Subscribe – $50 / month
           </a>
           <p style="font-size:0.75rem; color:var(--slate-400); text-align:center; margin-top:0.75rem;">Billed automatically each month through PayPal. Cancel anytime.</p>
         </div>
@@ -739,7 +739,7 @@
             <li class="membership-feature"><i class="fas fa-check"></i> Community outreach committee participation</li>
             <li class="membership-feature"><i class="fas fa-check"></i> Exclusive event discounts & mixers</li>
           </ul>
-          <a href="#" class="btn btn-outline-white pay-link" data-pay="annualCivilian" style="margin-top:auto;">
+          <a href="#membership" class="btn btn-outline-white pay-link" data-pay="annualCivilian" style="margin-top:auto;">
             <i class="fab fa-paypal"></i> Join – $50 / year
           </a>
         </div>
@@ -753,11 +753,22 @@
             <li class="membership-feature"><i class="fas fa-check"></i> Law enforcement interview prep & workshops</li>
             <li class="membership-feature"><i class="fas fa-check"></i> Resume review by senior investigators</li>
           </ul>
-          <a href="#" class="btn btn-outline-white pay-link" data-pay="cadet" style="margin-top:auto;">
+          <a href="#membership" class="btn btn-outline-white pay-link" data-pay="cadet" style="margin-top:auto;">
             <i class="fab fa-paypal"></i> Join – $40 / year
           </a>
         </div>
-      
+        <div class="membership-card">
+          <h3 class="membership-name">Community Ally & Sponsors</h3>
+          <div class="membership-price">Custom <span></span></div>
+          <p class="membership-desc">For businesses and community partners who want to support NLPOA's mission.</p>
+          <ul class="membership-features">
+            <li class="membership-feature"><i class="fas fa-check"></i> Golf Classic & event sponsorships</li>
+            <li class="membership-feature"><i class="fas fa-check"></i> Recognition at chapter events</li>
+          </ul>
+          <a href="#contact" class="btn btn-outline-gold" style="margin-top:auto;">Partner With NLPOA</a>
+        </div>
+      </div>
+
       <p style="text-align:center; color:var(--slate-300); font-size:0.85rem; margin-top:-1.5rem;">
         <i class="fas fa-lock"></i> Payments are processed securely by PayPal. No PayPal account is needed to pay by card.
       </p>
@@ -916,6 +927,24 @@
           <div class="form-group">
             <label class="form-label" for="contactMessage">Your Message *</label>
             <textarea id="contactMessage" class="form-control" placeholder="How can we assist you or collaborate?" required></textarea>
+          </div>
+
+          <!-- Spam protection: human check + hidden trap field for bots -->
+          <div class="form-group">
+            <label class="form-label" for="contactCaptcha">
+              <i class="fas fa-shield-alt" style="color:var(--gold-600);"></i>
+              Human check: <span id="captchaQuestion">What is 3 + 4?</span> *
+            </label>
+            <div style="display:flex; gap:0.75rem; align-items:center;">
+              <input type="text" id="contactCaptcha" class="form-control" inputmode="numeric" autocomplete="off" placeholder="Your answer" style="max-width:180px;" required>
+              <button type="button" id="captchaRefresh" aria-label="New question" title="New question" style="color:var(--gold-600); font-size:1.1rem;">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+          <div aria-hidden="true" style="position:absolute; left:-9999px; height:0; overflow:hidden;">
+            <label for="contactWebsite">Leave this field empty</label>
+            <input type="text" id="contactWebsite" name="website" tabindex="-1" autocomplete="off">
           </div>
 
           <button type="submit" class="btn btn-primary-gold btn-lg" style="width: 100%;">
@@ -1607,7 +1636,7 @@
   </div>
 
   <!-- Javascript -->
-  <script src="site-config.js"></script>
-  <script src="app.js"></script>
+  <script src="site-config.js?v=6"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>
