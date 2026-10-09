@@ -66,6 +66,18 @@ const SITE_CONFIG = {
     }
   },
 
+  // ==========================================================================
+  // CONTACT FORM -> GOOGLE SHEET
+  // Paste your Google Apps Script "Web app" link here (see SHEET-SETUP.md).
+  // It looks like: https://script.google.com/macros/s/AKfy.../exec
+  // Leave "" to use the email-only (FormSubmit) method instead.
+  // ==========================================================================
+  contactSheetUrl: "https://script.google.com/macros/s/AKfycbxCyaxiU92XLZsA8vkVvWEoUL5LcPUCvjecyx1J79Vo0GLdFkktPH14qvYLX9w7BgU/exec",
+
+  // MEMBERSHIP PORTAL DEMO CREDENTIALS
+  memberPortalDemo: {
+    email: "member@nlpoa.org",
+    password: "Houston2026!"
   // MEMBERSHIP PORTAL DEMO CREDENTIALS
   memberPortalDemo: {
     email: "member@nlpoa.org",
