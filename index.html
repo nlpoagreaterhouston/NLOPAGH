@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>soon
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NLPOA Greater Houston Chapter | National Latino Peace Officers Association</title>
   <meta name="description" content="Official website of the National Latino Peace Officers Association (NLPOA) Greater Houston Chapter. Honoring Family, Education, and Community through Service and Mentorship.">
@@ -724,7 +725,7 @@
             <li class="membership-feature"><i class="fas fa-check"></i> Officer wellness & peer mentorship network</li>
           </ul>
           <a href="#membership" class="btn btn-primary-gold pay-link" data-pay="monthlyOfficer" style="margin-top:auto;">
-            <i class="fab fa-paypal"></i> Join – $50 / month
+            <i class="fab fa-paypal"></i> Subscribe – $50 / month
           </a>
           <p style="font-size:0.75rem; color:var(--slate-400); text-align:center; margin-top:0.75rem;">Billed automatically each month through PayPal. Cancel anytime.</p>
         </div>
@@ -756,7 +757,18 @@
             <i class="fab fa-paypal"></i> Join – $40 / year
           </a>
         </div>
-      
+        <div class="membership-card">
+          <h3 class="membership-name">Community Ally & Sponsors</h3>
+          <div class="membership-price">Custom <span></span></div>
+          <p class="membership-desc">For businesses and community partners who want to support NLPOA's mission.</p>
+          <ul class="membership-features">
+            <li class="membership-feature"><i class="fas fa-check"></i> Golf Classic & event sponsorships</li>
+            <li class="membership-feature"><i class="fas fa-check"></i> Recognition at chapter events</li>
+          </ul>
+          <a href="#contact" class="btn btn-outline-gold" style="margin-top:auto;">Partner With NLPOA</a>
+        </div>
+      </div>
+
       <p style="text-align:center; color:var(--slate-300); font-size:0.85rem; margin-top:-1.5rem;">
         <i class="fas fa-lock"></i> Payments are processed securely by PayPal. No PayPal account is needed to pay by card.
       </p>
@@ -1569,6 +1581,107 @@
     </div>
   </div>
 
+    <!-- 5. Membership Sign-Up Modal (info is saved to a Google Sheet, then member continues to PayPal) -->
+  <div class="modal-overlay" id="membershipModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="color:#fff; font-size:1.25rem;"><i class="fas fa-id-card" style="color:var(--gold-400);"></i> NLPOA Membership Application</h3>
+        <button class="modal-close-btn" onclick="closeAllModals()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="membershipSignupForm">
+          <!-- Step 1: Member details -->
+          <div id="msStep1">
+            <div style="background:var(--slate-100); border:1px dashed var(--gold-500); border-radius:var(--radius-md); padding:0.9rem 1rem; margin-bottom:1.25rem;">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:var(--slate-500);">Selected Membership</div>
+              <div style="display:flex; justify-content:space-between; gap:1rem; align-items:baseline; flex-wrap:wrap;">
+                <strong id="msTierName" style="color:var(--navy-800);">Membership</strong>
+                <strong id="msTierPrice" style="color:var(--gold-700);"></strong>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="msFullName">Full Name *</label>
+              <input type="text" id="msFullName" class="form-control" placeholder="e.g. Alejandro Morales" autocomplete="name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="msAddress">Mailing Address *</label>
+              <input type="text" id="msAddress" class="form-control" placeholder="123 Main St, Houston, TX 77002" autocomplete="street-address" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="msEmail">Email *</label>
+                <input type="email" id="msEmail" class="form-control" placeholder="you@email.com" autocomplete="email" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="msPhone">Phone Number *</label>
+                <input type="tel" id="msPhone" class="form-control" placeholder="(832) 555-0123" autocomplete="tel" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="msAgency">Agency *</label>
+                <input type="text" id="msAgency" class="form-control" placeholder="e.g. Houston Police Department" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="msPosition">Position *</label>
+                <input type="text" id="msPosition" class="form-control" placeholder="e.g. Officer, Dispatcher, Cadet" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="msHeard">How did you hear about us?</label>
+              <select id="msHeard" class="form-control">
+                <option value="">Select one...</option>
+                <option>NLPOA member or friend</option>
+                <option>My agency / coworker</option>
+                <option>Facebook</option>
+                <option>Instagram</option>
+                <option>Community event</option>
+                <option>Golf Classic</option>
+                <option>Scholarship program</option>
+                <option>Internet search</option>
+                <option value="Other">Other</option>
+              </select>
+              <input type="text" id="msHeardOther" class="form-control" placeholder="Please tell us how you heard about us" style="display:none; margin-top:0.6rem;">
+            </div>
+
+            <!-- Hidden trap field for bots -->
+            <div aria-hidden="true" style="position:absolute; left:-9999px; height:0; overflow:hidden;">
+              <label for="msWebsite">Leave this field empty</label>
+              <input type="text" id="msWebsite" tabindex="-1" autocomplete="off">
+            </div>
+
+            <button type="submit" class="btn btn-primary-gold btn-lg" id="msSubmitBtn" style="width:100%; margin-top:0.5rem;">
+              Next: Continue to Payment <i class="fas fa-arrow-right"></i>
+            </button>
+            <p style="font-size:0.78rem; color:var(--slate-500); text-align:center; margin-top:0.75rem;">
+              Your information is shared only with the NLPOA Greater Houston board.
+            </p>
+          </div>
+
+          <!-- Step 2: Go to PayPal -->
+          <div id="msStep2" style="display:none; text-align:center; padding:1rem 0;">
+            <div style="width:70px; height:70px; border-radius:50%; background:rgba(16, 185, 129, 0.15); color:var(--success); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; font-size:2rem;">
+              <i class="fas fa-check"></i>
+            </div>
+            <h3 style="color:var(--navy-900); font-size:1.5rem; margin-bottom:0.5rem;">Thank you, <span id="msThanksName"></span>!</h3>
+            <p style="color:var(--slate-600); font-size:0.95rem; margin-bottom:1.25rem;">
+              Your information has been received. One last step: complete your payment through PayPal.
+              <strong>Your membership is not active until payment is completed.</strong>
+            </p>
+            <a href="#" target="_blank" rel="noopener" class="btn btn-primary-gold btn-lg" id="msPayBtn" style="width:100%;">
+              <i class="fab fa-paypal"></i> <span id="msPayLabel">Continue to PayPal</span>
+            </a>
+            <p style="font-size:0.78rem; color:var(--slate-500); margin-top:0.9rem;">
+              No PayPal account is needed to pay by card. Use the same email you entered here so we can match your payment.
+            </p>
+            <button type="button" class="btn btn-navy" onclick="closeAllModals()" style="margin-top:1rem;">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- 7. Event RSVP Modal -->
   <div class="modal-overlay" id="eventModal">
     <div class="modal-card">
@@ -1624,7 +1737,7 @@
   </div>
 
   <!-- Javascript -->
-  <script src="site-config.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <script src="site-config.js?v=9"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>
