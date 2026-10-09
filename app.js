@@ -5,14 +5,20 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initMobileNav();
-  initGalleryAndSocialFeed();
-  initScholarshipPortal();
-  initPayments();
-  initEventsCalendar();
-  initContactForm();
-  initFAQAccordion();
-  initMembersOnlyPortal();
+  // Payments first, and each section isolated, so one failing section
+  // can never stop the others (including the payment buttons) from working.
+  [
+    initPayments,
+    initMobileNav,
+    initGalleryAndSocialFeed,
+    initScholarshipPortal,
+    initEventsCalendar,
+    initContactForm,
+    initFAQAccordion,
+    initMembersOnlyPortal
+  ].forEach(fn => {
+    try { fn(); } catch (err) { console.error('NLPOA init failed:', fn.name, err); }
+  });
 });
 
 /* ==========================================================================
@@ -383,6 +389,7 @@ function initPayments() {
   const cfg = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.payments) || {};
   const tiers = cfg.tiers || {};
   const merchantId = (cfg.paypalMerchantId || '').trim();
+  const donateUrl = (cfg.donateUrl || '').trim();
 
   // Only ever send people to PayPal
   const isPayPalUrl = (u) => /^https:\/\/(www\.)?paypal\.com\//i.test(u || '');
@@ -395,6 +402,7 @@ function initPayments() {
       link.target = '_blank';
       link.rel = 'noopener';
     } else {
+      console.warn('[NLPOA payments] No valid PayPal link for tier "' + link.dataset.pay + '". Value seen by the page:', JSON.stringify(url), '| tiers loaded:', Object.keys(tiers));
       link.addEventListener('click', (e) => {
         e.preventDefault();
         showToast('Online payment for this tier is not set up yet. Please email nlpoahouston@gmail.com to join.', 'warning');
@@ -432,20 +440,35 @@ function initPayments() {
         showToast('Please enter a valid contribution amount.', 'warning');
         return;
       }
-      if (!merchantId) {
+      const cause = causeSelect ? causeSelect.options[causeSelect.selectedIndex].text : 'General Fund';
+      let url = '';
+
+      if (isPayPalUrl(donateUrl)) {
+        // A PayPal Donate button link was provided; the donor enters the amount on PayPal
+        url = donateUrl;
+      } else if (merchantId) {
+        const params = new URLSearchParams({
+          cmd: '_donations',
+          business: merchantId,
+          amount: currentAmount.toFixed(2),
+          currency_code: 'USD',
+          item_name: 'NLPOA Greater Houston - ' + cause,
+          no_shipping: '1'
+        });
+        url = 'https://www.paypal.com/cgi-bin/webscr?' + params.toString();
+      } else {
         showToast('Online donations are not set up yet. Please email nlpoahouston@gmail.com.', 'warning');
         return;
       }
 
-      const cause = causeSelect ? causeSelect.options[causeSelect.selectedIndex].text : 'General Fund';
-      const params = new URLSearchParams({
-        business: merchantId,
-        amount: currentAmount.toFixed(2),
-        currency_code: 'USD',
-        item_name: 'NLPOA Greater Houston - ' + cause,
-        no_recurring: '0'   // lets the donor choose to make it monthly on PayPal
-      });
-      window.open('https://www.paypal.com/donate/?' + params.toString(), '_blank', 'noopener');
+      console.log('[NLPOA payments] Opening donation link:', url);
+      const win = window.open(url, '_blank');
+      if (win) {
+        win.opener = null;
+      } else {
+        // A pop-up blocker stopped the new tab, so open PayPal in this tab instead
+        window.location.href = url;
+      }
     });
   }
 }
@@ -483,22 +506,99 @@ function initEventsCalendar() {
    ========================================================================== */
 function initContactForm() {
   const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('contactName')?.value.trim();
-      const email = document.getElementById('contactEmail')?.value.trim();
-      const msg = document.getElementById('contactMessage')?.value.trim();
+  if (!contactForm) return;
 
-      if (!name || !email || !msg) {
-        showToast('Please fill out all required fields.', 'warning');
-        return;
-      }
+  const TO_EMAIL = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.emailAddress) || 'nlpoahouston@gmail.com';
 
-      showToast(`Thank you, ${name}! Your message has been received by the board.`, 'success');
-      contactForm.reset();
-    });
+  // ---- Human check (simple math question) + bot traps ----
+  const captchaQuestionEl = document.getElementById('captchaQuestion');
+  const captchaInput = document.getElementById('contactCaptcha');
+  const loadedAt = Date.now();
+  let captchaAnswer = 0;
+
+  function newCaptcha() {
+    const a = Math.floor(Math.random() * 9) + 1;
+    const b = Math.floor(Math.random() * 9) + 1;
+    captchaAnswer = a + b;
+    if (captchaQuestionEl) captchaQuestionEl.textContent = 'What is ' + a + ' + ' + b + '?';
+    if (captchaInput) captchaInput.value = '';
   }
+  newCaptcha();
+  document.getElementById('captchaRefresh')?.addEventListener('click', newCaptcha);
+
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('contactName')?.value.trim();
+    const email = document.getElementById('contactEmail')?.value.trim();
+    const phone = document.getElementById('contactPhone')?.value.trim() || 'Not provided';
+    const subjectSel = document.getElementById('contactSubject');
+    const topic = subjectSel ? subjectSel.options[subjectSel.selectedIndex].text : 'General Inquiries';
+    const msg = document.getElementById('contactMessage')?.value.trim();
+
+    if (!name || !email || !msg) {
+      showToast('Please fill out all required fields.', 'warning');
+      return;
+    }
+
+    // Bot traps: hidden field filled in, or form submitted impossibly fast
+    const trap = document.getElementById('contactWebsite')?.value;
+    if (trap || (Date.now() - loadedAt) < 3000) {
+      if (!trap) {
+        showToast('Please take a moment to review your message, then try again.', 'warning');
+      }
+      return;
+    }
+
+    // Human check
+    if (parseInt(captchaInput?.value, 10) !== captchaAnswer) {
+      showToast('The human check answer is incorrect. Please try the new question.', 'warning');
+      newCaptcha();
+      captchaInput?.focus();
+      return;
+    }
+
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    }
+
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(TO_EMAIL), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'NLPOA Website: ' + topic + ' (from ' + name + ')',
+          _replyto: email,
+          _template: 'table',
+          _captcha: 'false',
+          Name: name,
+          Email: email,
+          Phone: phone,
+          Topic: topic,
+          Message: msg
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.success === 'false' || data.success === false) throw new Error('Send failed');
+
+      showToast('Thank you, ' + name + '! Your message was sent to the board.', 'success');
+      contactForm.reset();
+      newCaptcha();
+    } catch (err) {
+      console.error('[NLPOA contact form]', err);
+      // Backup: open the visitor's own email app with the message filled in
+      const body = 'Name: ' + name + '\nEmail: ' + email + '\nPhone: ' + phone + '\nTopic: ' + topic + '\n\n' + msg;
+      showToast('We could not send it automatically, so your email app will open to send it instead.', 'warning');
+      window.location.href = 'mailto:' + TO_EMAIL + '?subject=' + encodeURIComponent('NLPOA Website: ' + topic) + '&body=' + encodeURIComponent(body);
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHtml;
+      }
+    }
+  });
 }
 
 /* ==========================================================================
