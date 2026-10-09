@@ -45,6 +45,27 @@ const SITE_CONFIG = {
   golfDate: "October 18, 2026",
   golfLocation: "Wildcat Golf Club, Houston, TX",
 
+  // ==========================================================================
+  // PAYMENTS (PayPal)  -- paste your links between the quotes
+  // See PAYPAL-SETUP.md for exactly where to get each one.
+  // Any link left as "" will show "payment not set up yet" when clicked.
+  // ==========================================================================
+  payments: {
+    // Your PayPal "Merchant ID" (Profile > Business information). Used for donations.
+    // Use the Merchant ID, NOT your email, so your email isn't visible in the page.
+    paypalMerchantId: "",
+
+    // One PayPal link per membership tier.
+    // Annual tiers: a Pay Now / Buy Now button link, or a yearly Subscription plan link.
+    // Monthly tier: a Subscription PLAN link (this is what bills members automatically).
+    tiers: {
+      annualOfficer:   "",   // $75 / year  - Annual Membership, Sworn Personnel
+      monthlyOfficer:  "",   // $50 / month - Monthly Membership + Legal Coverage (recurring)
+      annualCivilian:  "",   // $50 / year  - Annual Civilian Member
+      cadet:           ""    // $40 / year  - Police Academy Cadets
+    }
+  },
+
   // MEMBERSHIP PORTAL DEMO CREDENTIALS
   memberPortalDemo: {
     email: "member@nlpoa.org",

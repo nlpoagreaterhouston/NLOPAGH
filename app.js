@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initGalleryAndSocialFeed();
   initScholarshipPortal();
-  initMembershipHub();
-  initDonationSystem();
+  initPayments();
   initEventsCalendar();
   initContactForm();
   initFAQAccordion();
@@ -377,78 +376,37 @@ function initScholarshipPortal() {
 }
 
 /* ==========================================================================
-   4. Membership Hub with Digital ID Card Generator
+   4 & 5. Payments (PayPal): membership tiers + donations
+   Links live in site-config.js under SITE_CONFIG.payments
    ========================================================================== */
-function initMembershipHub() {
-  const joinBtns = document.querySelectorAll('.join-tier-btn');
-  const modal = document.getElementById('membershipModal');
-  const form = document.getElementById('membershipForm');
+function initPayments() {
+  const cfg = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.payments) || {};
+  const tiers = cfg.tiers || {};
+  const merchantId = (cfg.paypalMerchantId || '').trim();
 
-  const inputName = document.getElementById('memFullName');
-  const inputAgency = document.getElementById('memAgency');
-  const selectTier = document.getElementById('memTierSelect');
+  // Only ever send people to PayPal
+  const isPayPalUrl = (u) => /^https:\/\/(www\.)?paypal\.com\//i.test(u || '');
 
-  const cardName = document.getElementById('cardMemberName');
-  const cardAgency = document.getElementById('cardMemberAgency');
-  const cardTier = document.getElementById('cardMemberTier');
-  const cardId = document.getElementById('cardMemberId');
-  const cardExp = document.getElementById('cardMemberExp');
-
-  // Open modal from buttons
-  joinBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tier = btn.getAttribute('data-tier') || 'Active Peace Officer';
-      if (selectTier) selectTier.value = tier;
-      updateLiveCard();
-      if (modal) modal.classList.add('active');
-    });
+  // ---- Membership tier buttons ----
+  document.querySelectorAll('.pay-link').forEach(link => {
+    const url = (tiers[link.dataset.pay] || '').trim();
+    if (isPayPalUrl(url)) {
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+    } else {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        showToast('Online payment for this tier is not set up yet. Please email nlpoahouston@gmail.com to join.', 'warning');
+      });
+    }
   });
 
-  // Real-time Card Updating
-  function updateLiveCard() {
-    if (cardName) cardName.textContent = inputName?.value.trim() || 'OFFICER JOHN DOE';
-    if (cardAgency) cardAgency.textContent = inputAgency?.value.trim() || 'HOUSTON AREA LAW ENFORCEMENT';
-    if (cardTier) cardTier.textContent = selectTier?.value || 'ACTIVE PEACE OFFICER';
-    if (cardId) cardId.textContent = 'HOU-' + (Math.abs(hashString(inputName?.value || 'NLPOA')) % 90000 + 10000);
-    if (cardExp) cardExp.textContent = 'DEC ' + (new Date().getFullYear() + 1);
-  }
-
-  inputName?.addEventListener('input', updateLiveCard);
-  inputAgency?.addEventListener('input', updateLiveCard);
-  selectTier?.addEventListener('change', updateLiveCard);
-
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      showToast('Welcome to NLPOA Greater Houston Chapter! Your membership pass is active.', 'success');
-      setTimeout(() => {
-        closeAllModals();
-      }, 1800);
-    });
-  }
-
-  function hashString(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) - hash) + str.charCodeAt(i);
-      hash |= 0;
-    }
-    return hash;
-  }
-}
-
-/* ==========================================================================
-   5. Donation & Sponsorship System
-   ========================================================================== */
-function initDonationSystem() {
+  // ---- Donations ----
   const presetBtns = document.querySelectorAll('.preset-btn');
   const customInput = document.getElementById('customDonateAmount');
   const donateSubmitBtn = document.getElementById('donateSubmitBtn');
-  const modal = document.getElementById('donateModal');
   const causeSelect = document.getElementById('donationCause');
-  const receiptAmount = document.getElementById('receiptAmount');
-  const receiptCause = document.getElementById('receiptCause');
-  const receiptId = document.getElementById('receiptNumber');
 
   let currentAmount = 100;
 
@@ -470,28 +428,24 @@ function initDonationSystem() {
 
   if (donateSubmitBtn) {
     donateSubmitBtn.addEventListener('click', () => {
-      if (currentAmount <= 0) {
-        showToast('Please specify a valid contribution amount.', 'warning');
+      if (currentAmount < 1) {
+        showToast('Please enter a valid contribution amount.', 'warning');
+        return;
+      }
+      if (!merchantId) {
+        showToast('Online donations are not set up yet. Please email nlpoahouston@gmail.com.', 'warning');
         return;
       }
 
-      const cause = causeSelect ? causeSelect.options[causeSelect.selectedIndex].text : 'Scholarship Fund';
-      
-      if (receiptAmount) receiptAmount.textContent = '$' + currentAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-      if (receiptCause) receiptCause.textContent = cause;
-      if (receiptId) receiptId.textContent = 'TX-NLPOA-' + Math.floor(100000 + Math.random() * 900000);
-
-      if (modal) modal.classList.add('active');
-    });
-  }
-
-  const donateConfirmBtn = document.getElementById('confirmDonationPaymentBtn');
-  if (donateConfirmBtn) {
-    donateConfirmBtn.addEventListener('click', () => {
-      showToast('Thank you for supporting NLPOA Greater Houston Chapter! Receipt emailed.', 'success');
-      setTimeout(() => {
-        closeAllModals();
-      }, 1600);
+      const cause = causeSelect ? causeSelect.options[causeSelect.selectedIndex].text : 'General Fund';
+      const params = new URLSearchParams({
+        business: merchantId,
+        amount: currentAmount.toFixed(2),
+        currency_code: 'USD',
+        item_name: 'NLPOA Greater Houston - ' + cause,
+        no_recurring: '0'   // lets the donor choose to make it monthly on PayPal
+      });
+      window.open('https://www.paypal.com/donate/?' + params.toString(), '_blank', 'noopener');
     });
   }
 }
