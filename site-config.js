@@ -77,7 +77,7 @@ const SITE_CONFIG = {
   // It looks like: https://script.google.com/macros/s/AKfy.../exec
   // Leave "" to use the email-only (FormSubmit) method instead.
   // ==========================================================================
-  contactSheetUrl: "",
+  contactSheetUrl: "https://script.google.com/macros/s/AKfycbx0ix5T22Zgt57snELtUX7F1GIGFCe3k6RorqiCoa6muBgUQ8fnmgiM7S6VX4o9UUg/exec",
 
   // ==========================================================================
   // MEMBERSHIP SIGN-UP FORM -> GOOGLE SHEET
@@ -85,7 +85,7 @@ const SITE_CONFIG = {
   // (This is a different link from contactSheetUrl above. See MEMBERSHIP-SHEET-SETUP.md.)
   // Leave "" and the sign-up details will be emailed to the board instead.
   // ==========================================================================
-  membershipSheetUrl: "",
+  membershipSheetUrl: "https://script.google.com/macros/s/AKfycbwWUz6vUtTBBEjBGePsPnIPYOAl9OO-GAiskZjRJnOH9qZAbsShcv-t7E36Voc32NXx/exec",
 
   // MEMBERSHIP PORTAL DEMO CREDENTIALS
   memberPortalDemo: {
