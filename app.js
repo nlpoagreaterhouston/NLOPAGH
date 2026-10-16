@@ -302,8 +302,37 @@ function initScholarshipPortal() {
 
   const openAppBtns = document.querySelectorAll('#openScholarshipAppBtn, .open-scholarship-btn');
 
+  // ---- Scholarship application switch (set in site-config.js > scholarshipApplication) ----
+  // enabled: false -> buttons say "Coming Soon" and the application pop-up cannot be opened.
+  // enabled: true  -> buttons say "Apply" and open the application pop-up.
+  const schCfg = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.scholarshipApplication) || {};
+  const schEnabled = schCfg.enabled === true;
+
+  // Replace a button's text but keep its icon
+  const setLabel = (el, text) => {
+    if (!el) return;
+    Array.from(el.childNodes).forEach(n => { if (n.nodeType === 3) n.remove(); });
+    el.appendChild(document.createTextNode(' ' + text));
+  };
+
+  openAppBtns.forEach(btn => {
+    let label;
+    if (!schEnabled) label = 'Application Coming Soon';
+    else if (btn.closest('.scholarship-banner-content')) label = 'Start Online Application';
+    else label = 'Apply for Scholarship';
+    setLabel(btn, label);
+  });
+  setLabel(document.querySelector('.scholarship-banner-content h3'),
+    schEnabled ? '2027 Academic Scholarship Applications Now Open'
+               : '2027 Academic Scholarship Applications Coming Soon');
+  setLabel(document.querySelector('#scholarshipModal .modal-header h3'), 'Scholarship Application');
+
   openAppBtns.forEach(btn => {
     btn.addEventListener('click', () => {
+      if (!schEnabled) {
+        showToast(schCfg.comingSoonMessage || 'The scholarship application is coming soon. Email nlpoahouston@gmail.com with any questions.', 'info');
+        return;
+      }
       resetScholarshipForm();
       if (modal) modal.classList.add('active');
     });
@@ -811,6 +840,37 @@ function initFAQAccordion() {
    ========================================================================== */
 function initMembersOnlyPortal() {
   const openLoginBtns = document.querySelectorAll('.open-member-portal-btn');
+
+  // ---- Board Portal switch (set in site-config.js > boardPortal) ----
+  // enabled: false -> all portal links are hidden and nothing can be opened.
+  // enabled: true  -> the links open the real, Google-protected portal URL.
+  // Either way, the old demo login below is never reached.
+  const portalCfg = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.boardPortal) || {};
+  const portalUrl = (portalCfg.url || '').trim();
+  const portalValid = /^https:\/\//i.test(portalUrl);
+
+  if (portalCfg.enabled !== true) {
+    openLoginBtns.forEach(btn => { (btn.closest('li') || btn).style.display = 'none'; });
+    return;
+  }
+  openLoginBtns.forEach(btn => {
+    if (btn.tagName === 'A' && portalValid) {
+      btn.href = portalUrl;
+      btn.target = '_blank';
+      btn.rel = 'noopener';
+    } else {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (portalValid) {
+          window.open(portalUrl, '_blank', 'noopener');
+        } else {
+          showToast('The board portal is not available yet.', 'info');
+        }
+      });
+    }
+  });
+  return;
+  // ---- Old demo login (unreachable; kept only until it is removed) ----
   const loginModal = document.getElementById('memberLoginModal');
   const dashboardModal = document.getElementById('memberDashboardModal');
   const loginForm = document.getElementById('memberLoginForm');
