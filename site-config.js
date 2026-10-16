@@ -86,10 +86,4 @@ const SITE_CONFIG = {
   // Leave "" and the sign-up details will be emailed to the board instead.
   // ==========================================================================
   membershipSheetUrl: "https://script.google.com/macros/s/AKfycbwWUz6vUtTBBEjBGePsPnIPYOAl9OO-GAiskZjRJnOH9qZAbsShcv-t7E36Voc32NXx/exec",
-
-  // MEMBERSHIP PORTAL DEMO CREDENTIALS
-  memberPortalDemo: {
-    email: "",
-    password: ""
-  }
 };
