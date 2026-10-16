@@ -86,4 +86,33 @@ const SITE_CONFIG = {
   // Leave "" and the sign-up details will be emailed to the board instead.
   // ==========================================================================
   membershipSheetUrl: "https://script.google.com/macros/s/AKfycbwWUz6vUtTBBEjBGePsPnIPYOAl9OO-GAiskZjRJnOH9qZAbsShcv-t7E36Voc32NXx/exec",
+
+  // ==========================================================================
+  // SCHOLARSHIP APPLICATION POP-UP
+  // enabled: false = every scholarship button says "Application Coming Soon" and
+  //                  the application pop-up cannot be opened.
+  // enabled: true  = the buttons say "Apply" and open the application pop-up.
+  // ==========================================================================
+  scholarshipApplication: {
+    enabled: false,
+    comingSoonMessage: "The scholarship application is coming soon. Email nlpoahouston@gmail.com with any questions."
+  },
+
+  // ==========================================================================
+  // BOARD PORTAL (private area for the executive board)
+  // enabled: false = the "Members Portal Login", "Access Member Documents" and
+  //                  "Members Only Area" links are HIDDEN on the site.
+  // enabled: true  = those links open the url below (your Google Drive folder or
+  //                  board dashboard). Google checks who is allowed in.
+  // ==========================================================================
+  boardPortal: {
+    enabled: false,
+    url: ""     // e.g. "https://drive.google.com/drive/folders/XXXXXXXX"
+  },
+
+  // MEMBERSHIP PORTAL DEMO CREDENTIALS
+  memberPortalDemo: {
+    email: "member@nlpoa.org",
+    password: "Houston2026!"
+  }
 };
