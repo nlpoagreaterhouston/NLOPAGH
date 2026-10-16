@@ -90,6 +90,6 @@ const SITE_CONFIG = {
   // MEMBERSHIP PORTAL DEMO CREDENTIALS
   memberPortalDemo: {
     email: "member@nlpoa.org",
-    password: "Houston2026!"
+    password: " "
   }
 };
