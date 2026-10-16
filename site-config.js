@@ -89,7 +89,7 @@ const SITE_CONFIG = {
 
   // MEMBERSHIP PORTAL DEMO CREDENTIALS
   memberPortalDemo: {
-    email: "member@nlpoa.org",
-    password: " "
+    email: "",
+    password: ""
   }
 };
