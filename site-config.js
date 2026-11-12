@@ -101,7 +101,7 @@ const SITE_CONFIG = {
   // ==========================================================================
   homePhoto: {
     enabled: true,
-    image: "Pictures/nlpoa-badges-small.jpg",
+    image: "Pictures/pathes850.png",
     alt: "National LPOA badge surrounded by the badges of Houston-area agencies",
     fit: "contain",
     shape: "portrait",
