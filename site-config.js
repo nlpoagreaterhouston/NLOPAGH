@@ -91,7 +91,9 @@ const SITE_CONFIG = {
   // HOME PAGE PICTURE (the framed photo on the right side of the front page)
   // enabled: true  = shows the picture;  false = hides it (headline uses full width).
   // image:   file name of the photo, e.g. "Pictures/home.jpg" (upload it to your Pictures folder).
-  // shape:   "portrait" (tall, default), "landscape" (wide), or "square".
+  // fit:     "contain" = show the WHOLE picture with nothing cropped (best for logos and
+  //          group graphics). "cover" = fill the frame and crop the edges (best for photos).
+  // shape:   "portrait" (tall, default), "landscape" (wide), or "square" (only used when fit is "cover").
   // position: which part stays visible if the photo is cropped:
   //           "center", "top", "bottom", "left", "right" (or e.g. "center top").
   // caption: optional line of text under the picture ("" for none).
@@ -99,8 +101,9 @@ const SITE_CONFIG = {
   // ==========================================================================
   homePhoto: {
     enabled: true,
-    image: "Pictures/NLPOABadgeslogo.png",
-    alt: "NLPOA Greater Houston Chapter",
+    image: "Pictures/nlpoa-badges-small.jpg",
+    alt: "National LPOA badge surrounded by the badges of Houston-area agencies",
+    fit: "contain",
     shape: "portrait",
     position: "center",
     caption: ""
