@@ -99,7 +99,7 @@ const SITE_CONFIG = {
   // ==========================================================================
   homePhoto: {
     enabled: true,
-    image: "Pictures/board2.jpg",
+    image: "Pictures/NLPOABadgeslogo.png",
     alt: "NLPOA Greater Houston Chapter",
     shape: "portrait",
     position: "center",
