@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // can never stop the others (including the payment buttons) from working.
   [
     initPayments,
+    initHomePhoto,
+    initSocialFeed,
     initMembershipSignup,
     initMobileNav,
     initGalleryAndSocialFeed,
@@ -691,6 +693,162 @@ function initMembershipSignup() {
       submitBtn.innerHTML = originalHtml;
     }
   });
+}
+
+/* ==========================================================================
+   Social Feed (Facebook page plugin + Instagram) - SITE_CONFIG.socialFeed
+   ========================================================================== */
+function initSocialFeed() {
+  const section = document.getElementById('gallery');
+  if (!section) return;
+  const cfg = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.socialFeed) || {};
+
+  // Switch OFF: hide the section and every link that points to it
+  if (cfg.enabled !== true) {
+    section.style.display = 'none';
+    document.querySelectorAll('a[href="#gallery"]').forEach(a => {
+      (a.closest('li') || a).style.display = 'none';
+    });
+    return;
+  }
+
+  const isUrl = (u, host) => new RegExp('^https://(www\\.)?' + host + '/', 'i').test((u || '').trim());
+
+  // ---- Facebook: official Page plugin (shows the latest posts) ----
+  const fbUrl = (cfg.facebookPageUrl || '').trim();
+  const fbBox = document.getElementById('sfFacebookEmbed');
+  const fbBtn = document.getElementById('sfFacebookBtn');
+  if (isUrl(fbUrl, 'facebook\\.com')) {
+    if (fbBtn) fbBtn.href = fbUrl;
+    if (fbBox) {
+      const w = Math.max(180, Math.min(500, Math.floor(fbBox.clientWidth || 340)));
+      const params = new URLSearchParams({
+        href: fbUrl,
+        tabs: 'timeline',
+        width: String(w),
+        height: '640',
+        small_header: 'false',
+        adapt_container_width: 'true',
+        hide_cover: 'false',
+        show_facepile: 'true'
+      });
+      const frame = document.createElement('iframe');
+      frame.src = 'https://www.facebook.com/plugins/page.php?' + params.toString();
+      frame.title = 'NLPOA Greater Houston on Facebook';
+      frame.width = String(w);
+      frame.height = '640';
+      frame.setAttribute('scrolling', 'no');
+      frame.setAttribute('frameborder', '0');
+      frame.setAttribute('loading', 'lazy');
+      frame.setAttribute('allow', 'encrypted-media');
+      fbBox.appendChild(frame);
+    }
+  } else if (document.getElementById('sfFacebook')) {
+    document.getElementById('sfFacebook').style.display = 'none';
+  }
+
+  // ---- Instagram: widget code > individual posts > follow panel ----
+  const igUrl = (cfg.instagramUrl || '').trim();
+  const igBox = document.getElementById('sfInstagramEmbed');
+  const igBtn = document.getElementById('sfInstagramBtn');
+  if (isUrl(igUrl, 'instagram\\.com') && igBtn) igBtn.href = igUrl;
+
+  if (igBox) {
+    const widgetCode = (cfg.instagramWidgetCode || '').trim();
+    const posts = (cfg.instagramPostUrls || [])
+      .map(u => (u || '').trim())
+      .filter(u => /^https:\/\/(www\.)?instagram\.com\/(p|reel|tv)\/[\w-]+/i.test(u))
+      .slice(0, 6);
+
+    if (widgetCode) {
+      // Snippet from a feed service (Elfsight, Curator, etc.). Scripts are re-created so they run.
+      const tpl = document.createElement('template');
+      tpl.innerHTML = widgetCode;
+      tpl.content.querySelectorAll('script').forEach(old => {
+        const s = document.createElement('script');
+        Array.from(old.attributes).forEach(a => s.setAttribute(a.name, a.value));
+        s.text = old.text;
+        old.replaceWith(s);
+      });
+      igBox.appendChild(tpl.content);
+    } else if (posts.length) {
+      posts.forEach(u => {
+        const clean = u.split('?')[0];
+        const bq = document.createElement('blockquote');
+        bq.className = 'instagram-media';
+        bq.setAttribute('data-instgrm-permalink', clean + '?utm_source=ig_embed&utm_campaign=loading');
+        bq.setAttribute('data-instgrm-version', '14');
+        const a = document.createElement('a');
+        a.href = clean; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = 'View this post on Instagram';
+        bq.appendChild(a);
+        igBox.appendChild(bq);
+      });
+      const process = () => { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
+      if (window.instgrm) {
+        process();
+      } else {
+        const s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.instagram.com/embed.js';
+        s.onload = process;
+        document.body.appendChild(s);
+      }
+    } else {
+      igBox.innerHTML =
+        '<div class="sf-placeholder"><i class="fab fa-instagram"></i>' +
+        '<strong style="color:var(--navy-900);">Photos from our events and community drives</strong>' +
+        '<p style="margin-top:0.5rem; font-size:0.9rem;">See scholarships, golf classic photos, and more on our Instagram page.</p></div>';
+    }
+  }
+}
+
+/* ==========================================================================
+   Home page picture (right side of the hero) - SITE_CONFIG.homePhoto
+   ========================================================================== */
+function initHomePhoto() {
+  const fig = document.getElementById('heroPhoto');
+  const layout = document.getElementById('heroLayout');
+  const frame = document.getElementById('heroPhotoFrame');
+  if (!fig || !layout || !frame) return;
+  const cfg = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.homePhoto) || {};
+
+  // Switch OFF: hide the picture and let the headline use the full width again
+  if (cfg.enabled !== true) {
+    fig.style.display = 'none';
+    layout.classList.add('hero-layout--single');
+    return;
+  }
+
+  const placeholder = () => {
+    frame.innerHTML = '<div class="hero-photo-empty"><i class="fas fa-camera"></i><span>Photo coming soon</span></div>';
+  };
+
+  // Shape of the frame: portrait (default), landscape, or square
+  const shapes = { portrait: '4 / 5', landscape: '4 / 3', square: '1 / 1' };
+  if (window.matchMedia('(min-width: 961px)').matches) {
+    frame.style.aspectRatio = shapes[cfg.shape] || shapes.portrait;
+  }
+
+  const src = (cfg.image || '').trim();
+  if (src && !/^\s*(javascript|data|vbscript):/i.test(src)) {
+    const img = document.createElement('img');
+    img.alt = cfg.alt || 'NLPOA Greater Houston';
+    img.style.objectPosition = cfg.position || 'center';
+    img.loading = 'eager';
+    img.onerror = placeholder;          // missing or broken file: show the placeholder instead
+    img.src = src;
+    frame.innerHTML = '';
+    frame.appendChild(img);
+  } else {
+    placeholder();
+  }
+
+  const cap = document.getElementById('heroPhotoCaption');
+  if (cap && (cfg.caption || '').trim()) {
+    cap.textContent = cfg.caption.trim();
+    cap.style.display = 'block';
+  }
 }
 
 /* ==========================================================================
