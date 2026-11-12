@@ -10,7 +10,7 @@
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="NLPOA Greater Houston Chapter | Service & Mentorship">
   <meta property="og:description" content="Dedicated to family, education, and community across Greater Houston through scholarships, mentorship, and professional excellence.">
-  <meta property="og:image" content="Pictures/NLPOABadgeslogo.png">
+  <meta property="og:image" content="C:/Users/gonhe/.gemini/antigravity/brain/dac78599-4cf3-4737-8a22-cb0198e6c9a9/.user_uploaded/media_1787025720046.png">
   <meta property="og:type" content="website">
 
   <!-- Google Fonts & FontAwesome -->
@@ -94,12 +94,33 @@
   <section id="home" class="hero-section">
     <div class="hero-background">
       <div class="image-editable-wrap" style="width:100%;height:100%;">
-        <img src="Pictures/NLPOABadgeslogo.png" alt="Houston Police Community Outreach" class="hero-bg-img">
+        <img src="C:/Users/gonhe/.gemini/antigravity/brain/dac78599-4cf3-4737-8a22-cb0198e6c9a9/hero_community_police_1787023942110." alt="Houston Police Community Outreach" class="hero-bg-img">
       </div>
       <div class="hero-gradient-overlay"></div>
     </div>
 
+    <style>
+      .hero-layout { position:relative; z-index:2; display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,0.85fr); column-gap:3.5rem; row-gap:3rem; align-items:center; }
+      .hero-layout .hero-content { max-width:none; }
+      .hero-layout .hero-cta-group { margin-bottom:0; }
+      .hero-layout .hero-stats-strip { grid-column:1 / -1; }
+      .hero-layout--single { grid-template-columns:1fr; }
+      .hero-layout--single .hero-content { max-width:840px; }
+      .hero-photo { margin:0; position:relative; }
+      .hero-photo::before { content:''; position:absolute; inset:14px -14px -14px 14px; border:2px solid rgba(212,175,55,0.35); border-radius:var(--radius-lg); z-index:-1; }
+      .hero-photo-frame { position:relative; border-radius:var(--radius-lg); overflow:hidden; border:3px solid var(--gold-400); box-shadow:0 24px 60px rgba(0,0,0,0.45); background:rgba(255,255,255,0.06); aspect-ratio:4/5; }
+      .hero-photo-frame img { width:100%; height:100%; object-fit:cover; display:block; }
+      .hero-photo-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; height:100%; padding:1.5rem; text-align:center; color:var(--gold-300); font-weight:600; }
+      .hero-photo-empty i { font-size:2.5rem; }
+      .hero-photo-caption { margin-top:1.1rem; text-align:center; font-size:0.85rem; font-style:italic; color:var(--slate-300); }
+      @media (max-width: 960px) {
+        .hero-layout { grid-template-columns:1fr; }
+        .hero-photo { max-width:460px; width:100%; margin-inline:auto; }
+        .hero-photo-frame { aspect-ratio:4/3; }
+      }
+    </style>
     <div class="container">
+      <div class="hero-layout" id="heroLayout">
       <div class="hero-content">
         <div class="hero-eyebrow">
           <i class="fas fa-shield-alt"></i> Greater Houston Chapter • Founded 2014
@@ -125,6 +146,15 @@
             <i class="fas fa-images"></i> Explore Live Feed
           </a>
         </div>
+      </div><!-- /hero-content -->
+
+        <!-- Home page picture (turn on/off and change the photo in site-config.js > homePhoto) -->
+        <figure class="hero-photo" id="heroPhoto">
+          <div class="hero-photo-frame" id="heroPhotoFrame">
+            <div class="hero-photo-empty"><i class="fas fa-camera"></i><span>Photo coming soon</span></div>
+          </div>
+          <figcaption class="hero-photo-caption" id="heroPhotoCaption" style="display:none;"></figcaption>
+        </figure>
 
         <div class="hero-stats-strip">
           <div class="stat-item">
@@ -144,7 +174,7 @@
             <span class="stat-label">Inclusive Membership</span>
           </div>
         </div>
-      </div>
+      </div><!-- /hero-layout -->
     </div>
   </section>
 
@@ -571,6 +601,54 @@
             <div class="recipient-school">Texas A&M University • Public Administration</div>
             <div class="recipient-award">$2,000 Future Officers Award</div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Feed Section (turn on/off with SITE_CONFIG.socialFeed.enabled in site-config.js) -->
+  <section id="gallery" class="social-feed-section section-padding" style="background:var(--slate-50);">
+    <style>
+      .sf-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; align-items:start; }
+      .sf-card { background:#fff; border:1px solid var(--slate-200); border-radius:var(--radius-md); padding:1.25rem; display:flex; flex-direction:column; gap:1rem; }
+      .sf-card-head { display:flex; align-items:center; gap:0.6rem; font-weight:800; font-size:1.1rem; color:var(--navy-900); }
+      .sf-card-head i { color:var(--gold-600); }
+      .sf-embed { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:180px; width:100%; overflow:hidden; }
+      .sf-embed iframe { border:none; overflow:hidden; max-width:100%; }
+      .sf-embed blockquote.instagram-media { width:100% !important; max-width:540px !important; min-width:0 !important; margin:0 auto 1rem !important; }
+      .sf-placeholder { text-align:center; padding:2rem 1rem; color:var(--slate-600); }
+      .sf-placeholder i { font-size:2.5rem; color:var(--gold-600); margin-bottom:0.75rem; display:block; }
+      .sf-note { font-size:0.78rem; color:var(--slate-500); text-align:center; margin:0; }
+    </style>
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">
+          <i class="fas fa-images"></i> Live From Our Social Media
+        </div>
+        <h2 class="section-title">Follow NLPOA Greater Houston</h2>
+        <p class="section-subtitle">
+          See our latest news, events, and community moments as they happen.
+        </p>
+      </div>
+
+      <div class="sf-grid">
+        <!-- Facebook -->
+        <div class="sf-card" id="sfFacebook">
+          <div class="sf-card-head"><i class="fab fa-facebook-f"></i> Facebook</div>
+          <div class="sf-embed" id="sfFacebookEmbed"></div>
+          <a id="sfFacebookBtn" class="btn btn-navy btn-sm" href="https://www.facebook.com/nlpoahouston" target="_blank" rel="noopener" style="align-self:center;">
+            <i class="fab fa-facebook-f"></i> Follow on Facebook
+          </a>
+          <p class="sf-note">Feed not loading? Some browsers and ad blockers hide it. Use the button above to visit our page.</p>
+        </div>
+
+        <!-- Instagram -->
+        <div class="sf-card" id="sfInstagram">
+          <div class="sf-card-head"><i class="fab fa-instagram"></i> Instagram</div>
+          <div class="sf-embed" id="sfInstagramEmbed"></div>
+          <a id="sfInstagramBtn" class="btn btn-navy btn-sm" href="https://www.instagram.com/nlpoagreaterhouston/" target="_blank" rel="noopener" style="align-self:center;">
+            <i class="fab fa-instagram"></i> Follow on Instagram
+          </a>
         </div>
       </div>
     </div>
@@ -1727,7 +1805,7 @@
   </div>
 
   <!-- Javascript -->
-  <script src="site-config.js?v=11"></script>
-  <script src="app.js?v=11"></script>
+  <script src="site-config.js?v=13"></script>
+  <script src="app.js?v=13"></script>
 </body>
 </html>
