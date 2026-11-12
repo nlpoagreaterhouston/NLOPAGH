@@ -13,8 +13,8 @@ const SITE_CONFIG = {
   mailingAddress: "P.O. Box 231521, Houston, TX 77223",
   phoneNumber: "(832) 755-9860",
   emailAddress: "nlpoahouston@gmail.com",
-  facebookUrl: "https://www.facebook.com/nlpoagreaterhouston",
-  instagramUrl: "https://www.instagram.com",
+  facebookUrl: "https://www.facebook.com/nlpoahouston",
+  instagramUrl: "https://www.instagram.com/nlpoagreaterhouston/",
 
   // MOTTO & MISSION
   motto: "Honoring Family, Education, and Community through Service and Mentorship",
@@ -86,6 +86,44 @@ const SITE_CONFIG = {
   // Leave "" and the sign-up details will be emailed to the board instead.
   // ==========================================================================
   membershipSheetUrl: "https://script.google.com/macros/s/AKfycbwWUz6vUtTBBEjBGePsPnIPYOAl9OO-GAiskZjRJnOH9qZAbsShcv-t7E36Voc32NXx/exec",
+
+  // ==========================================================================
+  // HOME PAGE PICTURE (the framed photo on the right side of the front page)
+  // enabled: true  = shows the picture;  false = hides it (headline uses full width).
+  // image:   file name of the photo, e.g. "Pictures/home.jpg" (upload it to your Pictures folder).
+  // shape:   "portrait" (tall, default), "landscape" (wide), or "square".
+  // position: which part stays visible if the photo is cropped:
+  //           "center", "top", "bottom", "left", "right" (or e.g. "center top").
+  // caption: optional line of text under the picture ("" for none).
+  // If the file is missing or the name is wrong, a "Photo coming soon" box shows instead.
+  // ==========================================================================
+  homePhoto: {
+    enabled: true,
+    image: "Pictures/board2.jpg",
+    alt: "NLPOA Greater Houston Chapter",
+    shape: "portrait",
+    position: "center",
+    caption: ""
+  },
+
+  // ==========================================================================
+  // SOCIAL FEED SECTION ("Social Feed" in the menu)
+  // enabled: true  = shows the section; false = hides it and every link to it.
+  // Facebook: shows your page's latest posts automatically.
+  // Instagram: use ONE of these (the first one filled in is used):
+  //   instagramWidgetCode - paste the snippet from a feed service (Elfsight, Curator, etc.)
+  //   instagramPostUrls   - up to 6 post links, e.g. "https://www.instagram.com/p/XXXXXXXX/"
+  //   (leave both empty to show a simple "follow us" panel)
+  // ==========================================================================
+  socialFeed: {
+    enabled: true,
+    facebookPageUrl: "https://www.facebook.com/nlpoahouston",
+    instagramUrl: "https://www.instagram.com/nlpoagreaterhouston/",
+    instagramPostUrls: [
+      // "https://www.instagram.com/p/XXXXXXXX/",
+    ],
+    instagramWidgetCode: ""
+  },
 
   // ==========================================================================
   // SCHOLARSHIP APPLICATION POP-UP
